@@ -93,8 +93,8 @@ function App() {
     // 実際には画像のURLをサーバーにアップロードして発行されたURLを使用する必要があります。
     // 現状はアプリ自体のURL（例）とハッシュタグをシェアとします。
     const shareUrl = encodeURIComponent('https://nice-book.forestailjp.workers.dev/');
-    const shareText = encodeURIComponent('「Nice-Book Generator」で作りました\n#NiceBook #名言');
-    window.open(`https://twitter.com/intent/tweet?url=${shareUrl}&text=${shareText}`, '_blank');
+    const shareText = encodeURIComponent('言葉を本にする「Nice-Book Generator」\n#NiceBook\n');
+    window.open(`https://x.com/intent/tweet?url=${shareUrl}&text=${shareText}`, '_blank');
   };
 
   const handleShareFacebook = () => {
@@ -104,7 +104,7 @@ function App() {
 
   const handleShareLine = () => {
     const shareUrl = encodeURIComponent('https://nice-book.forestailjp.workers.dev/');
-    const shareText = encodeURIComponent('「Nice-Book Generator」で作りました\n');
+    const shareText = encodeURIComponent('言葉を本にする「Nice-Book Generator」\n');
     // LINEのシェアURLスキーム
     window.open(`https://social-plugins.line.me/lineit/share?url=${shareUrl}&text=${shareText}`, '_blank');
   };
@@ -114,7 +114,7 @@ function App() {
       <header className="header">
         <h1 className="title">言葉を本にする</h1>
         <p className="subtitle">
-          あなたの好きなフレーズを、まるでビジネス書の見開きページのように表示します。
+          あなたの好きなフレーズを、本のページのように表示します。
         </p>
       </header>
 
@@ -192,7 +192,7 @@ function App() {
             </div>
 
             <div className="share-section" style={{ marginTop: '2rem', textAlign: 'center' }}>
-              <p style={{ marginBottom: '1rem', color: '#ccc', fontSize: '0.9rem' }}>SNSでシェアする</p>
+              <p style={{ marginBottom: '1rem', color: '#ccc', fontSize: '0.9rem' }}>本サービスをSNSでシェアする</p>
               <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem' }}>
                 <button
                   onClick={handleShareX}
