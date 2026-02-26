@@ -112,10 +112,9 @@ function App() {
   return (
     <div className="app-container">
       <header className="header">
-        <h1 className="title">言葉を、本にする。</h1>
+        <h1 className="title">言葉を本にする</h1>
         <p className="subtitle">
-          あなたの好きなフレーズを、まるでベストセラービジネス書の見開きページのように。
-          SNSでシェアしたくなる、リアルでプレミアムな画像を生成します。
+          あなたの好きなフレーズを、まるでビジネス書の見開きページのように表示します。
         </p>
       </header>
 
