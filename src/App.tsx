@@ -5,11 +5,15 @@ import './index.css';
 
 function App() {
   const [inputText, setInputText] = useState('');
+  const [previewText, setPreviewText] = useState('');
+  const [generateTrigger, setGenerateTrigger] = useState(0);
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedImageUrl, setGeneratedImageUrl] = useState<string | null>(null);
+  const [isDebugMode, setIsDebugMode] = useState(false); // デバッグ用プレビュー表示フラグ
   const previewRef = useRef<HTMLDivElement>(null);
+  const isGeneratingRef = useRef(false);
 
-  const handleGenerate = async () => {
+  const handleGenerate = () => {
     if (!inputText.trim()) {
       alert('テキストを入力してください');
       return;
@@ -17,8 +21,17 @@ function App() {
 
     if (!previewRef.current) return;
 
+    isGeneratingRef.current = true;
+    setIsGenerating(true);
+    setPreviewText(inputText);
+    setGenerateTrigger(prev => prev + 1);
+  };
+
+  const handlePreviewReady = async () => {
+    if (!isGeneratingRef.current) return;
+
     try {
-      setIsGenerating(true);
+      if (!previewRef.current) return;
 
       // Wait a tiny bit to ensure DOM is fully updated and fonts are ready
       await new Promise(resolve => setTimeout(resolve, 100));
@@ -55,6 +68,7 @@ function App() {
       console.error('画像生成に失敗しました:', error);
       alert('画像の生成に失敗しました。');
     } finally {
+      isGeneratingRef.current = false;
       setIsGenerating(false);
     }
   };
@@ -73,6 +87,26 @@ function App() {
 
   const handleBackToEdit = () => {
     setGeneratedImageUrl(null);
+  };
+
+  const handleShareX = () => {
+    // 実際には画像のURLをサーバーにアップロードして発行されたURLを使用する必要があります。
+    // 現状はアプリ自体のURL（例）とハッシュタグをシェアとします。
+    const shareUrl = encodeURIComponent('https://nice-book.forestailjp.workers.dev/');
+    const shareText = encodeURIComponent('「Nice-Book Generator」で作りました\n#NiceBook #名言');
+    window.open(`https://twitter.com/intent/tweet?url=${shareUrl}&text=${shareText}`, '_blank');
+  };
+
+  const handleShareFacebook = () => {
+    const shareUrl = encodeURIComponent('https://nice-book.forestailjp.workers.dev/');
+    window.open(`https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`, '_blank');
+  };
+
+  const handleShareLine = () => {
+    const shareUrl = encodeURIComponent('https://nice-book.forestailjp.workers.dev/');
+    const shareText = encodeURIComponent('「Nice-Book Generator」で作りました\n');
+    // LINEのシェアURLスキーム
+    window.open(`https://social-plugins.line.me/lineit/share?url=${shareUrl}&text=${shareText}`, '_blank');
   };
 
   return (
@@ -102,27 +136,41 @@ function App() {
               />
             </div>
 
-            <div className="preview-section">
-              <h2 className="preview-title">プレビュー</h2>
-              <BookPreview ref={previewRef} text={inputText} />
-
-              <div className="button-group">
-                <button
-                  className="btn btn-primary"
-                  onClick={handleGenerate}
-                  disabled={isGenerating || !inputText.trim()}
-                >
-                  {isGenerating ? (
-                    <>
-                      <span className="spinner"></span>
-                      生成中...
-                    </>
-                  ) : (
-                    '画像を生成する'
-                  )}
-                </button>
-              </div>
+            <div className="button-group" style={{ marginBottom: '2rem' }}>
+              <button
+                className="btn btn-primary"
+                onClick={handleGenerate}
+                disabled={isGenerating || !inputText.trim()}
+              >
+                {isGenerating ? (
+                  <>
+                    <span className="spinner"></span>
+                    生成中...
+                  </>
+                ) : (
+                  '本を開く'
+                )}
+              </button>
             </div>
+
+            {/* BookPreviewは通常時は裏でレンダリングしておき、画像化の対象にする */}
+            <div style={isDebugMode ? { marginBottom: '2rem' } : { position: 'absolute', top: '-9999px', left: '-9999px', opacity: 0, pointerEvents: 'none' }}>
+              {isDebugMode && <h2 className="preview-title" style={{ fontSize: '1rem', color: '#888' }}>デバッグプレビュー</h2>}
+              <BookPreview ref={previewRef} text={previewText} generateTrigger={generateTrigger} onReady={handlePreviewReady} />
+            </div>
+
+            {/* デバッグモードのトグルスイッチ */}
+            {/* <div style={{ textAlign: 'center', marginTop: 'auto', paddingTop: '2rem' }}>
+              <label style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.4)', cursor: 'pointer' }}>
+                <input
+                  type="checkbox"
+                  checked={isDebugMode}
+                  onChange={(e) => setIsDebugMode(e.target.checked)}
+                  style={{ marginRight: '0.5rem', cursor: 'pointer' }}
+                />
+                プレビューを表示 (デバッグ用)
+              </label>
+            </div> */}
           </>
         ) : (
           <div className="preview-section">
@@ -142,6 +190,30 @@ function App() {
               <button className="btn btn-primary" onClick={handleDownload}>
                 ⏬ 画像をダウンロード
               </button>
+            </div>
+
+            <div className="share-section" style={{ marginTop: '2rem', textAlign: 'center' }}>
+              <p style={{ marginBottom: '1rem', color: '#ccc', fontSize: '0.9rem' }}>SNSでシェアする</p>
+              <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem' }}>
+                <button
+                  onClick={handleShareX}
+                  style={{ backgroundColor: '#000', color: '#fff', padding: '0.5rem 1.5rem', borderRadius: '20px', border: 'none', cursor: 'pointer', fontWeight: 'bold' }}
+                >
+                  X (Twitter)
+                </button>
+                <button
+                  onClick={handleShareFacebook}
+                  style={{ backgroundColor: '#1877F2', color: '#fff', padding: '0.5rem 1.5rem', borderRadius: '20px', border: 'none', cursor: 'pointer', fontWeight: 'bold' }}
+                >
+                  Facebook
+                </button>
+                <button
+                  onClick={handleShareLine}
+                  style={{ backgroundColor: '#06C755', color: '#fff', padding: '0.5rem 1.5rem', borderRadius: '20px', border: 'none', cursor: 'pointer', fontWeight: 'bold' }}
+                >
+                  LINE
+                </button>
+              </div>
             </div>
           </div>
         )}

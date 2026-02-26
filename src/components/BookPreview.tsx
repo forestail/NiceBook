@@ -6,10 +6,12 @@ import { ThreeBookPage } from './ThreeBookPage';
 
 interface BookPreviewProps {
   text: string;
+  onReady?: () => void;
+  generateTrigger?: number;
 }
 
 export const BookPreview = forwardRef<HTMLDivElement, BookPreviewProps>(
-  ({ text }, ref) => {
+  ({ text, onReady, generateTrigger }, ref) => {
     // Split the text into lines, handling empty strings
     const lines = text.split('\n'); // keep empty lines for formatting!
 
@@ -102,9 +104,18 @@ export const BookPreview = forwardRef<HTMLDivElement, BookPreviewProps>(
     const [texture, setTexture] = useState<THREE.CanvasTexture | null>(null);
     const hiddenContainerRef = useRef<HTMLDivElement>(null);
 
-    // Debounced texture generation
+    const onReadyRef = useRef(onReady);
     useEffect(() => {
-      const timer = setTimeout(async () => {
+      onReadyRef.current = onReady;
+    }, [onReady]);
+
+    // Texture generation (triggered by text or trigger changes, no typing debounce)
+    useEffect(() => {
+      // Don't auto-generate on initial empty text unless triggered
+      if (!text && !generateTrigger) return;
+
+      let isMounted = true;
+      const generateTexture = async () => {
         if (hiddenContainerRef.current) {
           try {
             // Give browser a frame to render the DOM size correctly
@@ -121,16 +132,25 @@ export const BookPreview = forwardRef<HTMLDivElement, BookPreviewProps>(
             newTexture.magFilter = THREE.LinearFilter;
             newTexture.format = THREE.RGBAFormat;
 
-            // Textures generated from DOM might need to be flipped depending on mapping
-            // Note: HTML canvas texture maps Y top-down intuitively in Three.js sometimes, but let's check
-            setTexture(newTexture);
+            if (isMounted) {
+              setTexture(newTexture);
+              // Wait for Three.js to render the new texture
+              requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                  if (onReadyRef.current) onReadyRef.current();
+                });
+              });
+            }
           } catch (e) {
             console.error('Failed to generate texture:', e);
+            if (isMounted && onReadyRef.current) onReadyRef.current();
           }
         }
-      }, 250); // 250ms debounce for typing
-      return () => clearTimeout(timer);
-    }, [text, fontSize]);
+      };
+
+      generateTexture();
+      return () => { isMounted = false; };
+    }, [text, fontSize, generateTrigger]);
 
     return (
       <div className="book-container-wrapper">
@@ -220,7 +240,7 @@ export const BookPreview = forwardRef<HTMLDivElement, BookPreviewProps>(
             zIndex: 10,
             textShadow: '0px 1px 3px rgba(0,0,0,0.8)'
           }}>
-            Nice-Book Generator by forestail.com
+            https://nice-book.forestailjp.workers.dev/
           </div>
 
         </div>
