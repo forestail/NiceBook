@@ -85,6 +85,43 @@ function App() {
     document.body.removeChild(link);
   };
 
+  const handleCopyImage = async () => {
+    if (!generatedImageUrl) return;
+
+    try {
+      // クリップボードAPIは通常 PNG 形式のみをサポートするため、Canvas経由でPNGに変換
+      const img = new Image();
+      img.src = generatedImageUrl;
+      await new Promise((resolve, reject) => {
+        img.onload = resolve;
+        img.onerror = reject;
+      });
+
+      const canvas = document.createElement('canvas');
+      canvas.width = img.width;
+      canvas.height = img.height;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) throw new Error('Canvas context is null');
+
+      ctx.drawImage(img, 0, 0);
+
+      canvas.toBlob(async (blob) => {
+        if (!blob) throw new Error('Blob creation failed');
+        try {
+          const item = new ClipboardItem({ 'image/png': blob });
+          await navigator.clipboard.write([item]);
+          alert('画像をクリップボードにコピーしました。');
+        } catch (copyError) {
+          console.error('クリップボードへの書き込みエラー:', copyError);
+          alert('画像のコピーに失敗しました。お使いのブラウザは対応していない可能性があります。');
+        }
+      }, 'image/png');
+    } catch (error) {
+      console.error('画像のコピー準備に失敗しました:', error);
+      alert('画像のコピーに失敗しました。');
+    }
+  };
+
   const handleBackToEdit = () => {
     setGeneratedImageUrl(null);
   };
@@ -185,6 +222,9 @@ function App() {
             <div className="button-group">
               <button className="btn btn-secondary" onClick={handleBackToEdit}>
                 戻る
+              </button>
+              <button className="btn btn-primary" onClick={handleCopyImage}>
+                📋 画像をコピー
               </button>
               <button className="btn btn-primary" onClick={handleDownload}>
                 ⏬ 画像をダウンロード
