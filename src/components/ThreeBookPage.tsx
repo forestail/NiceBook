@@ -41,10 +41,10 @@ const PageMesh = ({ texture }: { texture: THREE.CanvasTexture | null }) => {
             ref={meshRef}
             geometry={geometry}
             // Match the book's photographic perspective (the red lines):
-            // rotateX: slight tilt forward/backward
+            // rotateX: slight tilt forward/backward (negative value makes bottom closer, matching natural viewing perspective)
             // rotateY: tilt right side deeper into screen
             // Match the show-through text from the background image (slightly tilted to the right, negative Z rotation)
-            rotation={[0.05, -0.24, -0.08]} // Negative Z tilts clockwise perfectly matching the paper's printed perspective
+            rotation={[-0.08, -0.24, -0.08]} // Negative Z tilts clockwise perfectly matching the paper's printed perspective
             // Y軸を0.6から0.1へ下げ、heightの拡大分を下方向へ伸ばす（上端の位置は維持）
             position={[0.5, 0.1, 0]}
         >
