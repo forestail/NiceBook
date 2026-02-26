@@ -9,7 +9,7 @@ function App() {
   const [generateTrigger, setGenerateTrigger] = useState(0);
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedImageUrl, setGeneratedImageUrl] = useState<string | null>(null);
-  const [isDebugMode, setIsDebugMode] = useState(false); // デバッグ用プレビュー表示フラグ
+  const [isDebugMode] = useState(false); // デバッグ用プレビュー表示フラグ
   const previewRef = useRef<HTMLDivElement>(null);
   const isGeneratingRef = useRef(false);
 
