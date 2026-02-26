@@ -1,0 +1,353 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Shippori+Mincho:wght@500;700;800&display=swap');
+
+:root {
+  --primary-color: #d4af37;
+  /* Premium Gold */
+  --primary-hover: #b8962e;
+  --bg-gradient-start: #1a1a1a;
+  --bg-gradient-end: #0a0a0a;
+  --text-main: #f5f5f5;
+  --text-muted: #a0a0a0;
+  --glass-bg: rgba(255, 255, 255, 0.03);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-end));
+  color: var(--text-main);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* App Container */
+.app-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 3rem 2rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 3rem;
+  animation: fadeInDown 1s ease-out;
+}
+
+.title {
+  font-size: 3rem;
+  font-weight: 800;
+  background: linear-gradient(to right, #fff, var(--primary-color));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 1rem;
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+  font-size: 1.1rem;
+  color: var(--text-muted);
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* Glassmorphism Panel */
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  padding: 2.5rem;
+  width: 100%;
+  max-width: 800px;
+  box-shadow: var(--glass-shadow);
+  animation: fadeInUp 1s ease-out 0.2s both;
+}
+
+/* Input Form */
+.input-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.input-label {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-main);
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.text-input {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  color: #fff;
+  font-size: 1.1rem;
+  font-family: inherit;
+  transition: all 0.3s ease;
+  resize: vertical;
+  min-height: 100px;
+}
+
+.text-input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
+}
+
+.text-input::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* Buttons */
+.button-group {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.btn {
+  padding: 1rem 2rem;
+  border-radius: 50px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+  color: #000;
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+}
+
+.btn-primary:active {
+  transform: translateY(1px);
+}
+
+.btn-primary:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--text-main);
+  border: 1px solid var(--glass-border);
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Preview Section */
+.preview-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  opacity: 0;
+  animation: fadeIn 1s ease-out 0.4s both;
+}
+
+.preview-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: var(--text-main);
+}
+
+/* Book Preview Component specific */
+.book-container-wrapper {
+  perspective: 1200px;
+  /* Add high perspective for 3D warping */
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+/* Updated for Left-Page Close-up layout */
+.book-capture-area.left-page-only {
+  position: relative;
+  width: 750px;
+  /* Adjusted to a more portrait/book-page ratio */
+  height: 950px;
+  background-color: transparent;
+  overflow: hidden;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+  border-radius: 4px;
+  /* Slight rounding for realism */
+  transform-style: preserve-3d;
+}
+
+.book-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Left page text area - updated to cover the main page area */
+.book-text-overlay.left-page-overlay {
+  position: absolute;
+  top: 15%;
+  /* Increased from 10% to add more natural top margin (yohaku) */
+  left: 10%;
+  width: 75%;
+  /* Don't go all the way to the right edge (spine) */
+  height: 80%;
+  /* Adjusted for more space */
+  z-index: 2;
+
+  /* Centering for the Three.js Canvas container if needed */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.book-text-content {
+  font-family: 'Shippori Mincho', serif;
+  writing-mode: vertical-rl;
+  /* 縦書き (右から左) */
+  /* text-orientation: upright; を削除して、標準の mixed 設定に戻すことで、約物（ー、。、）が縦書き用に正しく回転します */
+
+  /* Ink color: Instead of pure black, use a dark, slightly warm grey */
+  color: rgba(30, 28, 26, 0.85);
+
+  font-weight: 700;
+  line-height: 1.6;
+  letter-spacing: 0.12em;
+
+  /* Text shadow for subtle depth/ink bleed and irregularity */
+  text-shadow:
+    0px 0px 1px rgba(30, 28, 26, 0.2),
+    /* Base slight bleed */
+    0px 1px 2px rgba(30, 28, 26, 0.1),
+    /* Directional smudging */
+    -1px 0px 1px rgba(0, 0, 0, 0.05);
+  /* Imperfection/noise */
+
+  /* Blend mode to make the ink blend realistically with the paper texture */
+  mix-blend-mode: multiply;
+
+  /* Fluid sizing handled by React, but constrain max height */
+  max-height: 100%;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  word-break: break-all;
+
+  /* Removed background gradient that caused the grey box issue.
+     Instead, just use text color with multiply blend mode for realism. */
+}
+
+/* Animations */
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+/* Loading Spinner */
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  border-top-color: #000;
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 768px) {
+  .title {
+    font-size: 2rem;
+  }
+
+  .glass-panel {
+    padding: 1.5rem;
+  }
+
+  .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .button-group {
+    flex-direction: column;
+  }
+}
