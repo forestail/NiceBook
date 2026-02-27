@@ -1,73 +1,24 @@
-# React + TypeScript + Vite
+# NiceBook (言葉を本にする)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+https://nice-book.forestailjp.workers.dev/
 
-Currently, two official plugins are available:
+## 概要説明
+NiceBookは、あなたの好きなフレーズや文章を、まるで本物の本のページに印刷されたかのように表示・画像化するWebアプリケーションです。
+入力したテキストが3D風の本のレイアウトに変換され、簡単に画像の保存やクリップボードへのコピーが可能です。SNS等でのシェアにも活用できます。
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 使い方
+1. **テキストの入力**
+   トップページのテキストエリアに、本に刻みたい言葉を入力します。
+   （例：名言、ポエム、ちょっとした思いつきなど）
+2. **画像の生成**
+   「本を開く」ボタンをクリックすると、入力したテキストが配置された本の画像が生成されます。
+3. **画像の保存・共有**
+   - **📋 画像をコピー**: 生成された画像をクリップボードにコピーします。（対応ブラウザのみ）
+   - **⏬ 画像をダウンロード**: 生成された画像をデバイスに保存します。
+   - 各種SNS（X, Facebook, LINE）ボタンで、本サービスを紹介することも可能です。（生成した画像を直接SNSにアップするボタンではありません）
+4. **やり直し**
+   「戻る」ボタンを押すと、テキストの編集画面へ戻り、再生成が可能です。
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## ScreenShot
+![ScreenShot 1](https://github.com/user-attachments/assets/4b226e91-31b3-4301-9db7-2c95331a3c45)
+![ScreenShot 2](https://github.com/user-attachments/assets/4574866a-98a1-4185-9e78-36dd4277aa10)
